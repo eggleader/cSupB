@@ -6,4 +6,6 @@ VARI-cSupB is based on the colored de Bruijn graph constructed by [VARI-merge](h
 
 # Usage
 The construction of graph and color matrix are seen  [VARI-merge](https://github.com/cosmo-team/cosmo/tree/VARI-merge).To obtain the coordinate system or variants, simply use the command line as follows:<tab>
-* cosmo-cSupB primates_mtDNAs_kmc_list.dbg primates_mtDNAs_kmc_list.colors.sd_vector >log.txt
+```
+cosmo-cSupB primates_mtDNAs_kmc_list.dbg primates_mtDNAs_kmc_list.colors.sd_vector >log.txt
+```
