@@ -1,0 +1,120 @@
+#ifndef PG_HPP
+#define PG_HPP
+
+struct Basis{
+	int type;//1:supernode;2:branches
+	vector<ssize_t> incomingnode;
+	vector<ssize_t> outgoingnode;
+	ssize_t startnode;
+	ssize_t endnode;
+	string color;
+	int length;
+	int width;
+	string sequence;
+};
+struct Mt_vcf{
+	vector<string> chroms,ids,refs,alts,filters,infos,formats;
+	vector<int> poss,quals;
+};
+struct Mt_gtf{
+	vector<string> seqids,sources,features,scores,strands,phases,attributes;
+	vector<int> starts,ends;
+};
+
+struct BubInfo{
+	int bubbleid,level,maxlevel,numnodes,numedges,numbranches,numsupernodes;
+	string bubcolor;
+	vector<ssize_t> pairnodeset;//(level,nodes1,nodes2,...)
+	vector<int> affiliation;//(bub_id,father_id,child_id1,child_id2)
+	vector<int> colorcount;
+	vector<string> branches;
+	vector<vector<ssize_t>> branchnodes;
+	vector<vector<string>> branchcolors;
+	vector<string> bridgebranches,tipbranches;
+	vector<ssize_t> sinknodes,sourcenodes;
+	vector<vector<int>> branchdigits;
+	vector<vector<ssize_t>> bridgebranchnodes,tipbranchnodes;
+//	ssize_t firstnode;//Cyclic iteration's startnode
+	vector<int> visited;
+	vector<Basis> bubblebasis;
+	vector<vector<int>> weightmat;
+	vector<int> sampleweight,samplelength;
+	int maxlength;
+	vector<int> gapbasisid;
+	string variantspos;
+	vector<string> pathseqs,pathcolors;
+	vector<int> pathlengths,pathweights,pathsupernodes;
+	vector<vector<int>> pathbranchwidths;
+	map<ssize_t,int> nodespos,refnodepos;
+};
+struct C_Su{
+	vector<vector<ssize_t>> pairnodesets;
+	vector<vector<int>> affiliationsets;
+	vector<string> bubblecolors;
+	map<ssize_t,int> nodepos;
+	map<ssize_t,int> refnodepos;
+	map<int,int> bub2gap;
+	map<int,int> bub2var;
+};
+struct Seqalign_result{
+	string alignseq;
+	vector<int> basescore;
+};
+struct Seqalign1_result{
+	vector<string> alignseq;
+	map<int,char> pos2keybase;
+	vector<int> basescore;
+};
+
+struct MSA{
+	vector<vector<ssize_t>> pairnodesets;
+	vector<int> bubid;
+	map<ssize_t,int> nodepos;
+	vector<string> bubblecolors;
+	vector<vector<string>> bubbleseqs;
+	vector<vector<int>> bubblelens;
+};
+struct CycleDFS{
+    ssize_t node;
+    int index;
+    vector<int> indexset;
+    vector<ssize_t> path;
+    vector<vector<ssize_t>> pathset;
+    string sequence;
+    vector<string> seqset;
+	vector<string> repeatset;
+};
+struct CyclicInfo{
+	map<ssize_t,int> cyclicnode;
+	vector<vector<ssize_t>> cyclicpaths;
+	vector<string> cyclicstrings;
+	vector<string> cycliccolors;
+};
+void nearby(); //get the neighbour information of node
+int StringCMP(string str1,string str2);//-1:diff length; 0:same length && no common 1 value; 1:same length && have common 1 value but less than length; 2:same
+string getnodecolor(ssize_t node);
+string getedgecolor(ssize_t edge);
+string ColorCap(vector<string> colorset);
+string ColorCup(vector<string> colorset);
+int myindegree(ssize_t node,string color);
+int myoutdegree(ssize_t node,string color);
+C_Su read_mypairs_from_file(string csupb_topo_file);
+Mt_vcf read_vcf_from_file(string vcffile);
+Mt_gtf read_gtf_from_file(string gtffile);
+void Cytoscape();//output the Sketch graph showed by cytoscape
+void visited_dbg(ssize_t startnode);// To visit all the outgoing nodes of a given node
+void GetPathofOneCutnode(ssize_t cutnode);/////To get the path of one node around and each node's indegree and outdegree are both 1
+void reconstruct_genome_seq(vector<int> sampleid);///reconstruct the genome sequences
+void judge_circle();//find cycle by node color method
+CycleDFS DFSCycleFinding(CycleDFS & dfsinfo);
+void GetCycleDFS();// find cycle by DFS method
+void GetAllWeight(ssize_t startnode);//Ignoring the cSupB information
+void visiting_samp_nodes(vector<int> samps,ssize_t startnode);//visiting all the nodes containing samps by starting from startnode
+void gtf2graph(C_Su c_su, Mt_gtf gtf_info);
+void vcf2graph(C_Su c_su, Mt_vcf mt_info);
+string read_researched_samples_from_file(string researched_samples_file);
+C_Su GetColoredSuperbubble();// visit graph, find cSupBs, reorganize the cSupBs, get variants
+vector<BubInfo> SupperBubblesAnalysis(C_Su c_su);// get the detailed information of the cSupBs
+MSA GetMSA(C_Su c_su);//get the MSA results
+void variants_analysis(MSA msa);//variants analysis
+#endif

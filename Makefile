@@ -56,7 +56,7 @@ SDREADER_OBJS=$(SDREADER_PATH)/LowReader.o $(SDREADER_PATH)/HighReader.o $(SDREA
 KMC_OBJS=$(KMC_PATH)/kmc_api/kmc_file.o $(KMC_PATH)/kmc_api/kmer_api.o $(KMC_PATH)/kmc_api/mmer.o
 BUILD_REQS=lut.hpp debug.hpp utility.hpp io.hpp sort.hpp kmer.hpp dummies.hpp debruijn_graph.hpp debruijn_graph_shifted.hpp pack-color.hpp pack-color-merge.hpp cosmo-dump.hpp cosmo-dump-full-edges.hpp cosmo-color-pd.hpp color-merge.hpp
 COLOR_REQS=colored_debruijn_graph.hpp io.hpp debug.hpp
-BINARIES=cosmo-build cosmo-color cosmo-test cosmo-benchmark cosmo-benchmark-varord pack-color cosmo-color-pd cosmo-read-color transpose cosmo-merge vari-merge cosmo-dump cosmo-dump-full-edges color-merge cosmo-analysis mycosmo cosmo-analysis2 cosmo-cSupB
+BINARIES=cosmo-build cosmo-color cosmo-test cosmo-benchmark cosmo-benchmark-varord pack-color cosmo-color-pd cosmo-read-color transpose cosmo-merge vari-merge cosmo-dump cosmo-dump-full-edges color-merge VARI-cSupB VARI-MSA VARI-AF
 
 default: all
 
@@ -74,16 +74,13 @@ cosmo-build: cosmo-build.cpp $(BUILD_REQS) compiler_flags
 cosmo-color: cosmo-color.cpp $(BUILD_REQS) compiler_flags
 	$(CXX) $(CPP_FLAGS) -o $@ $< $(KMC_OBJS) $(DEP_FLAGS)
 
-cosmo-analysis: cosmo-analysis.cpp $(BUILD_REQS) compiler_flags
+VARI-cSupB: VARI-cSupB.cpp $(BUILD_REQS) compiler_flags
 	$(CXX) $(CPP_FLAGS) -o $@ $< $(KMC_OBJS) $(DEP_FLAGS)
 
-cosmo-analysis2: cosmo-analysis2.cpp $(BUILD_REQS) compiler_flags
+VARI-MSA: VARI-MSA.cpp $(BUILD_REQS) compiler_flags
 	$(CXX) $(CPP_FLAGS) -o $@ $< $(KMC_OBJS) $(DEP_FLAGS)
 
-mycosmo: mycosmo.cpp $(BUILD_REQS) compiler_flags
-	$(CXX) $(CPP_FLAGS) -o $@ $< $(KMC_OBJS) $(DEP_FLAGS)
-
-cosmo-cSupB: cosmo-cSupB.cpp $(BUILD_REQS) compiler_flags
+VARI-AF: VARI-AF.cpp $(BUILD_REQS) compiler_flags
 	$(CXX) $(CPP_FLAGS) -o $@ $< $(KMC_OBJS) $(DEP_FLAGS)
 
 cosmo-dump: cosmo-dump.cpp $(BUILD_REQS) compiler_flags
